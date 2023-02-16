@@ -1,5 +1,5 @@
 import { ApolloProvider } from '@apollo/client';
-import { DropMail } from './Pages/main';
+import DropMail from './Pages/main';
 import client from './server/Apollo_client';
 import logo from './logo.svg';
 import './App.css';

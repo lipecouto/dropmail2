@@ -1,7 +1,7 @@
 import { useQuery, gql, useMutation } from '@apollo/client';
+import React from 'react';
 
-
-const GENERATE_MAIL = gql`
+export const GENERATE_MAIL = gql`
 mutation {
     introduceSession {
         id,
@@ -12,26 +12,11 @@ mutation {
     }
 }
 `
-
-
-export const ApolloMutation = () =>{
-
-    const {data, loading, error} = useMutation(GENERATE_MAIL)
+export const useApolloQuery = () =>{
     
-    return (
-     <>
-        {data}
-        {error}
-    </>)
-
-
-}
-
-export const ApolloQuery = (MAIL_ID) =>{
-
     const CHECK_MAIL = gql`
     query {
-        session(id: "${MAIL_ID}") {
+        session(id: "${sessionStorage.getItem('@SESSION_ID')}") {
             mails{
                 rawSize,
                 fromAddr,
@@ -43,10 +28,8 @@ export const ApolloQuery = (MAIL_ID) =>{
         }
     }
     `
-    const {data, loading, error, reset} = useQuery(CHECK_MAIL)
-    if(data){
-        console.log(data)
-    }
-
-    return data
+    
+    const { data, errors, loading } = useQuery(CHECK_MAIL)
+ 
+    return {data, errors, loading}
 }

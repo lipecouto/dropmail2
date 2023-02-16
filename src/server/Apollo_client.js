@@ -1,14 +1,16 @@
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloClient, InMemoryCache, } from '@apollo/client';
 
 const AUTH_TOKEN = '8989cAdx1ph22'
-
-const client = () =>{ 
-    const client = new ApolloClient({
-    uri: `https://dropmail.me/api/graphql/${AUTH_TOKEN}`,
+const CORS = 'https://cors-anywhere.herokuapp.com/'
+const client = new ApolloClient({
+    uri: `${CORS}https://dropmail.me/api/graphql/${AUTH_TOKEN}`,
+    fetchOptions: {
+      mode: 'cors',
+    },
+    headers: {
+      ContentType: 'text/json'
+    },
     cache: new InMemoryCache(),
-  })
-
-  return client 
-}
+  }); 
 
 export default client
