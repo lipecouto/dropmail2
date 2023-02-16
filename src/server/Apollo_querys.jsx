@@ -12,6 +12,22 @@ mutation {
     }
 }
 `
+
+export const CHECK_MAIL = gql`
+query {
+    session(id: "${sessionStorage.getItem('@SESSION_ID')}") {
+        mails{
+            rawSize,
+            fromAddr,
+            toAddr,
+            downloadUrl,
+            text,
+            headerSubject
+        }
+    }
+}
+`
+
 export const useApolloQuery = () =>{
     
     const CHECK_MAIL = gql`

@@ -22,8 +22,8 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import MailBody from './MailBody';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { useMutation, useQuery} from "@apollo/client";
-import { GENERATE_MAIL } from '../server/Apollo_querys';
+import { useMutation, useLazyQuery } from "@apollo/client";
+import { GENERATE_MAIL, CHECK_MAIL  } from '../server/Apollo_querys';
 
 import MailList from '../Components/MailList';
 
@@ -147,9 +147,47 @@ function DashboardContent() {
     }
   }, [ ])
 
+  
+  const [handleUpdate, {data, loading, errors}] = useLazyQuery(CHECK_MAIL)
+  if(loading){
+    toast.info('Carregando dados',{
+        position: toast.POSITION.TOP_LEFT,
+        autoClose: 1000,
+        pauseOnHover: false,
+      })     
+  }
+  if(data){
+    setUpdateCall(data)
+  }
+  if(errors){
+    toast.error('Sessão expirada',{
+        position: toast.POSITION.TOP_LEFT,
+        autoClose: 1000,
+        pauseOnHover: false,
+      })     
+  }
+  
+  
+  const refesh = () =>{
+    toast.info('Atualização automática em 15 segundos',{
+        position: toast.POSITION.TOP_LEFT,
+        autoClose: 15000,
+        pauseOnHover: false,
+      })     
+    }
 
+    React.useEffect(() => {
+        
+            setInterval(() =>{
+            refesh()
+            handleUpdate();
+            }, 15*1000)
+        
+    },[ handleUpdate ])
+    
   
   
+
   const getMailBody = (data) =>{
     setMail(data)
   }
@@ -177,8 +215,8 @@ function DashboardContent() {
               <MenuIcon />
             </IconButton>
             <Box padding={0.4} width={'100%'}>
-            <IconButton sx={{ p: '15px', fontSize: '1rem', borderRadius: '0' }}
-                onClick={useQuery}
+                <IconButton sx={{ p: '15px', fontSize: '1rem', borderRadius: '0' }}
+                onClick={handleUpdate}
                 >
                                     Atualizar
                 </IconButton>
